@@ -1,6 +1,7 @@
 package com.peaches.epicskyblock;
 
 import com.peaches.epicskyblock.Inventories.Boosters;
+import com.peaches.epicskyblock.Inventories.MainGUI;
 import com.peaches.epicskyblock.Inventories.Missions;
 import com.peaches.epicskyblock.Inventories.Upgrades;
 import org.bukkit.Bukkit;
@@ -341,13 +342,21 @@ class Command implements Listener, CommandExecutor {
                     return true;
                 }
             }
-            for (String message : ConfigManager.getInstance().getConfig().getStringList("help")) {
-                if (message.contains("%centered%")) {
-                    plugin.sendCenteredMessage(p, ChatColor.translateAlternateColorCodes('&', message.replace("%centered%", "")));
-                } else {
-                    p.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
-                }
+            if (User.getbyPlayer(p) == null) {
+                User.users.add(new User(p.getName()));
             }
+            if(User.getbyPlayer(p).getIsland() == null){
+                p.openInventory(MainGUI.inv(null));
+            }else{
+                p.openInventory(MainGUI.inv(User.getbyPlayer(p).getIsland()));
+            }
+//            for (String message : ConfigManager.getInstance().getConfig().getStringList("help")) {
+//                if (message.contains("%centered%")) {
+//                    plugin.sendCenteredMessage(p, ChatColor.translateAlternateColorCodes('&', message.replace("%centered%", "")));
+//                } else {
+//                    p.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
+//                }
+//            }
         } else {
             cs.sendMessage("This command must be executed by a player");
             return true;

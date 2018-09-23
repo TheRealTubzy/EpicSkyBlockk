@@ -1,8 +1,6 @@
 package com.peaches.epicskyblock;
 
-import com.peaches.epicskyblock.Inventories.Boosters;
-import com.peaches.epicskyblock.Inventories.Missions;
-import com.peaches.epicskyblock.Inventories.Upgrades;
+import com.peaches.epicskyblock.Inventories.*;
 import org.bukkit.*;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
@@ -76,8 +74,23 @@ public class EpicSkyBlock extends JavaPlugin implements Listener {
         pm.registerEvents(new Upgrades(), this);
         pm.registerEvents(new Missions(), this);
         pm.registerEvents(new Boosters(), this);
+        pm.registerEvents(new MainGUI(), this);
+        pm.registerEvents(new Members(), this);
     }
-
+    public ItemStack makeItem(String type, int amount,String name) {
+        int ty = 0;
+        if (type.contains(":")) {
+            String[] b = type.split(":");
+            type = b[0];
+            ty = Integer.parseInt(b[1]);
+        }
+        Material m = Material.matchMaterial(type);
+        ItemStack item = new ItemStack(m, amount, (short) ty);
+        ItemMeta me = item.getItemMeta();
+        me.setDisplayName(ChatColor.translateAlternateColorCodes('&',name));
+        item.setItemMeta(me);
+        return item;
+    }
     @EventHandler
     public void ontalk(AsyncPlayerChatEvent e) {
         Player p = e.getPlayer();
